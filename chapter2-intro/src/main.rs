@@ -1,3 +1,5 @@
+use std::env;
+
 use rand::prelude::*;
 
 /// Defines the struct to be a User
@@ -40,5 +42,17 @@ fn generate_float(generator: &mut ThreadRng) -> f64 {
 
 fn main() {
     let mut rng = rand::thread_rng();
-    println!["{}", generate_float(&mut rng)]
+    println!["{}", generate_float(&mut rng)];
+
+    let args: Vec<String> = env::args().collect();
+    println!["{:?}", args];
+
+    let path = &args[0];
+    if path.contains("/debug/") {
+        println!["The development app is running!"];
+    } else if path.contains("/release/") {
+        println!["The production server is running!"];
+    } else {
+        panic!["The setting is neither debug or release!"];
+    }
 }
