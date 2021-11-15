@@ -1,27 +1,31 @@
 use std::env;
 
-use serde_json::{json, Map};
-use serde_json::value::Value;
+use serde_json::json;
 
+use processes::process_input;
 use state::{read_file, write_to_file};
-use to_do::{ItemTypes, structs::traits::create::Create, to_do_factory};
+
+use crate::to_do::to_do_factory;
 
 mod state;
 mod to_do;
-
-const FILEPATH: &str = "/home/christopher/Documents/Rust/Rust Web Programming/chapter2/chapter2-todo/src/state.json";
+mod processes;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let mut state = read_file(FILEPATH);
-    println!["{:?}", state];
+    let mut state = read_file();
+
 
     if args.len() > 2 {
-        let status = &args[1];
+        let command = &args[1];
         let title = &args[2];
-
-        state.insert(title.to_string(), json!(status));
-        write_to_file(FILEPATH, &mut state);
+        let status: String;
+        match &state.get(*&title) {
+            Some(result) => status = result.to_string().replace('\"', ""),
+            None => status = "pending".to_string()
+        }
+        let item = to_do_factory(&status, title).expect(&status);
+        process_input(item, command.to_string(), &state);
     }
 }

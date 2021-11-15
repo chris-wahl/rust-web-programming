@@ -1,5 +1,10 @@
+use serde_json::{json, Map, Value};
+use crate::write_to_file;
+
 pub trait Create {
-    fn create(&self, title: &str) {
-        println!("{} is being created", title);
+    fn create(&self, title: &String, status: &String, state: &mut Map<String, Value>) {
+        state.insert(title.to_string(), json!(status));
+        write_to_file(state);
+        println!("{} has been created", title);
     }
 }

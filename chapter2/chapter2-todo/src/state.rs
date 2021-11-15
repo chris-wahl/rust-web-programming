@@ -6,8 +6,10 @@ use serde_json::Map;
 use serde_json::value::Value;
 use serde_json::json;
 
-pub fn read_file(file_name: &str) -> Map<String, Value> {
-    let mut file = File::open(file_name.to_string()).expect("File not found!");
+const FILEPATH: &str = "/home/christopher/Documents/Rust/Rust Web Programming/chapter2/chapter2-todo/src/state.json";
+
+pub fn read_file() -> Map<String, Value> {
+    let mut file = File::open(FILEPATH.to_string()).expect("File not found!");
     let mut data = String::new();
 
     file.read_to_string(&mut data).unwrap();
@@ -16,7 +18,7 @@ pub fn read_file(file_name: &str) -> Map<String, Value> {
     return state;
 }
 
-pub fn write_to_file(file_name: &str, state: &mut Map<String, Value>) {
+pub fn write_to_file(state: &mut Map<String, Value>) {
     let new_data = json!(state);
-    fs::write(file_name.to_string(), new_data.to_string()).expect("Unable to write file!");
+    fs::write(FILEPATH.to_string(), new_data.to_string()).expect("Unable to write file!");
 }
