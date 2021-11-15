@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::env::vars;
 
 fn title(s: &str) {
     let border = format!["----{}----", s.chars().map(|_| '-').collect::<String>()];
@@ -17,6 +16,7 @@ fn main() {
     lifetimes();
     structs();
     hashmaps_revisited();
+    traits();
 }
 
 fn strings() {
@@ -253,11 +253,12 @@ fn hashmaps_revisited() {
     title("HASHMAPS Revisited");
 
     enum AllowedData {
-        S(String), I(i8)
+        S(String),
+        I(i8),
     }
 
     struct CustomMap {
-        body: HashMap<String, AllowedData>
+        body: HashMap<String, AllowedData>,
     }
 
     impl CustomMap {
@@ -289,4 +290,76 @@ fn hashmaps_revisited() {
     map.display("test");
     map.display("testing");
     map.display("Should fail!");
+}
+
+#[allow(dead_code)]
+fn traits() {
+    title("TRAITS");
+
+    trait CanEdit {
+        fn edit(&self) {
+            println!["user is editing"];
+        }
+    }
+    trait CanCreate {
+        fn create(&self) {
+            println!["user is creating"];
+        }
+    }
+    trait CanDelete {
+        fn delete(&self) {
+            println!["user is deleting"];
+        }
+    }
+
+    fn delete<T: CanDelete>(user: T) {
+        // Only users with the trait CanDelete can access this function, which simply calls the CanDelete trait's related .delete().
+        user.delete();
+    }
+
+    struct BaseUser {
+        name: String,
+        password: String,
+    }
+
+    struct GeneralUser {
+        super_struct: BaseUser,
+        team: String,
+    }
+
+    struct AdminUser {
+        super_struct: BaseUser,
+    }
+    impl CanDelete for AdminUser {}
+    impl CanCreate for AdminUser {}
+    impl CanEdit for AdminUser {}
+
+    impl GeneralUser {
+        fn new(name: String, password: String, team: String) -> Self {
+            GeneralUser {
+                super_struct: BaseUser { name, password },
+                team
+            }
+        }
+    }
+
+    impl CanEdit for GeneralUser {}
+    impl CanCreate for GeneralUser {
+        fn create(&self) {
+            println!["{} is created under a {} team", self.super_struct.name, self.team];
+        }
+    }
+
+    let general_user = GeneralUser::new("Gen. User".to_string(), "placeholder".to_string(), "General team".to_string());
+    general_user.create();
+    general_user.edit();
+
+    let admin_user = AdminUser {
+        super_struct: BaseUser {
+            name: "Admin!".to_string(),
+            password: "another placeholder".to_string()
+        }
+    };
+    admin_user.create();
+    delete(admin_user);
 }
