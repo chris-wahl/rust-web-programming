@@ -1,3 +1,15 @@
+mod to_do;
+
+// use to_do::structs::{done::Done, pending::Pending};
+use to_do::structs::done::Done;
+use to_do::structs::pending::Pending;
+
 fn main() {
-    println!("Hello, world!");
+    let done: Done = Done::new("shopping");
+    println!["{}", done.super_struct.title];
+    println!["{}", done.super_struct.status];
+
+    let pending = Pending::new("laundry");
+    println!["{}", pending.super_struct.title];
+    println!["{}", pending.super_struct.status];
 }
