@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::env::vars;
 
 fn title(s: &str) {
     let border = format!["----{}----", s.chars().map(|_| '-').collect::<String>()];
@@ -14,6 +15,8 @@ fn main() {
     scopes_with_strings();
     scopes_with_numbers();
     lifetimes();
+    structs();
+    hashmaps_revisited();
 }
 
 fn strings() {
@@ -207,4 +210,83 @@ fn lifetimes() {
         }
         println!["Filtered outcome persists outside the 'b lifetime block: {}", outcome];
     } // And here, that filter_one is out of scope, so `outcome`'s lifetime has also ended.
+}
+
+fn structs() {
+    title("STRUCTS");
+
+    struct Human {
+        name: String,
+        age: i8,
+        current_thought: String,
+    }
+
+    impl Human {
+        fn new(input_name: &str, input_age: i8) -> Self { // Can return `Human` -OR- `Self`, which is understood to be the struct `Human`
+            Human {
+                name: input_name.to_string(),
+                age: input_age,
+                current_thought: String::from("nothing"),
+            }
+        }
+
+        fn with_thought(mut self, thought: &str) -> Self {
+            self.current_thought = thought.to_string();
+            self
+        }
+
+        fn speak(&self) {
+            println!["Hello, my name is {} and I'm {} years old.", self.name, self.age];
+        }
+    }
+
+    let developer = Human::new("Christopher Wahl", 36);
+    developer.speak();
+    println!["Current thought: {}", developer.current_thought];
+
+    let other_dev = Human::new("John", 41).with_thought("I'm hungry");
+    other_dev.speak();
+    println!["Other dev thinks: {}", other_dev.current_thought];
+}
+
+fn hashmaps_revisited() {
+    title("HASHMAPS Revisited");
+
+    enum AllowedData {
+        S(String), I(i8)
+    }
+
+    struct CustomMap {
+        body: HashMap<String, AllowedData>
+    }
+
+    impl CustomMap {
+        fn new() -> CustomMap {
+            CustomMap {
+                body: HashMap::new()
+            }
+        }
+
+        fn get(&self, key: &str) -> Option<&AllowedData> {
+            self.body.get(key)
+        }
+        fn insert(&mut self, key: &str, value: AllowedData) -> () { // `()` is a void return type, and is the same as not annotating at all
+            self.body.insert(key.to_string(), value);
+        }
+
+        fn display(&self, key: &str) {
+            match self.get(key) {
+                Some(AllowedData::I(value)) => println!["i8: {}", value],
+                Some(AllowedData::S(value)) => println!["String: {}", value],
+                None => println!["No entry in map for key: {}", key]
+            };
+        }
+    }
+
+    let mut map = CustomMap::new();
+    map.insert("test", AllowedData::I(8));
+    map.insert("testing", AllowedData::S("test value!".to_string()));
+    map.display("test");
+    map.display("testing");
+    map.display("Should fail!");
 }
