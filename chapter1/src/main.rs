@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt::Display;
 
 fn title(s: &str) {
     let border = format!["----{}----", s.chars().map(|_| '-').collect::<String>()];
@@ -17,6 +18,7 @@ fn main() {
     structs();
     hashmaps_revisited();
     traits();
+    macros();
 }
 
 fn strings() {
@@ -338,7 +340,7 @@ fn traits() {
         fn new(name: String, password: String, team: String) -> Self {
             GeneralUser {
                 super_struct: BaseUser { name, password },
-                team
+                team,
             }
         }
     }
@@ -357,9 +359,50 @@ fn traits() {
     let admin_user = AdminUser {
         super_struct: BaseUser {
             name: "Admin!".to_string(),
-            password: "another placeholder".to_string()
+            password: "another placeholder".to_string(),
         }
     };
     admin_user.create();
     delete(admin_user);
+}
+
+fn macros() {
+    title("MACROS!");
+
+    #[derive(Debug, Copy, Clone)]
+    struct Coordinate<T> {
+        x: T,
+        y: T,
+    }
+
+    let _one = Coordinate { x: 50, y: 50 }; // <i32>
+    let two = Coordinate { // <f32>
+        x: 500.32,
+        y: 95f32, // Will auto X into an f32 instead of default f64
+    };
+
+    let three = Coordinate { x: 1, y: 2u8 };
+
+    macro_rules! capitalize { // use `macro_rules!` instead of `fn` to define a macro.
+        ($a: expr) => { // `$a` is the expression that is passed into the macro.
+            let mut v: Vec<char> = $a.chars().collect(); // Convert the expression into a vector of chars
+            v[0] = v[0].to_uppercase().nth(0).unwrap(); // Uppercase the first char
+            $a = v.into_iter().collect(); // and turn it all back into a String.
+        } // Note, nothing is returned in a macro.
+    }
+
+    let mut x = String::from("test");
+    capitalize![x]; // Types are not defined by the macro, but traits are still checked,
+    // so can't call:
+    // capitalize![900.32]
+    // as the FromIterator<char> trait doesn't exist on f64
+    println!["{}", x];  // Will print "Test"
+
+
+    fn print<T: Display>(point: Coordinate<T>) { // ensure the compiler knows that T can be printed
+        println!["({}, {})", point.x, point.y];
+    }
+    print(three); // Will need to have a Copy trait to prevent `three` from getting moved
+    println!["{}", three.x];
+    println!["{:?}", two]; // Need to derive the Debug trait for this
 }
