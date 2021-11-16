@@ -6,7 +6,7 @@ use serde_json::Map;
 use serde_json::value::Value;
 use serde_json::json;
 
-const FILEPATH: &str = "/home/christopher/Documents/Rust/Rust Web Programming/chapter2/chapter2-todo/src/state.json";
+const FILEPATH: &str = "./state.json";
 
 pub fn read_file() -> Map<String, Value> {
     let mut file = File::open(FILEPATH.to_string()).expect("File not found!");
