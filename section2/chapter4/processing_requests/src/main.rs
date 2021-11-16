@@ -4,6 +4,7 @@ mod state;
 mod to_do;
 mod processes;
 mod views;
+mod json_serialization;
 
 const ADDR: &str = "127.0.0.1:8000";
 

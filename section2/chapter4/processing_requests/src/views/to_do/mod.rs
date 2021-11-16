@@ -4,6 +4,7 @@ use crate::views::path::Path;
 
 mod create;
 mod get;
+mod utils;
 
 pub fn item_factory(app: &mut web::ServiceConfig) {
     let base_path = Path {
