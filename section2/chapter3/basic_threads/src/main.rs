@@ -1,4 +1,5 @@
 use std::{thread, time};
+use std::sync::{Arc, Mutex};
 
 use async_std;
 use futures::executor::block_on;
@@ -83,9 +84,30 @@ fn asynchronous() {
     println!("Outcome: {}", outcome_one + outcome_two + outcome_three);
 }
 
+fn async_memory_types() {
+    println!["\n-------ASYNC MEMORY TYPES---------"];
+    // ARC enables references to outside data
+    let names = Arc::new(vec!["dave", "chloe", "simon"]);
+    let reference_data = Arc::clone(&names);
+
+    let new_thread = thread::spawn(move || {
+        println!("{}", reference_data[1]);
+    });
+    new_thread.join().unwrap();
+
+    // MUTEX enables mutating outside data
+    let count = Mutex::new(0);
+    let new_thread = thread::spawn(move || {
+        *(count.lock()).unwrap() += 1; // De-reference the lock, unwrap it, and mutate it.
+        println!("Count in thread: {:?}", count);
+    });
+    new_thread.join().unwrap();
+}
 
 fn main() {
     synchronous();
     threaded();
     asynchronous();
+
+    async_memory_types();
 }
