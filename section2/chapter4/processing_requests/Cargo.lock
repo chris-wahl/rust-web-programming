@@ -910,6 +910,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "managing_views"
+version = "0.1.0"
+dependencies = [
+ "actix-rt",
+ "actix-web",
+ "futures",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "match_cfg"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1157,17 +1168,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ba508cc11742c0dc5c1659771673afbab7a0efab23aa17e854cbab0837ed0b43"
 dependencies = [
  "unicode-xid",
-]
-
-[[package]]
-name = "processing_requests"
-version = "0.1.0"
-dependencies = [
- "actix-rt",
- "actix-web",
- "futures",
- "serde",
- "serde_json",
 ]
 
 [[package]]

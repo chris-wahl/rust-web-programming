@@ -2,6 +2,7 @@ use actix_web::web;
 mod utils;
 mod create;
 mod get;
+mod edit;
 use super::path::Path;
 
 
@@ -16,9 +17,12 @@ pub fn item_factory(app: &mut web::ServiceConfig) {
     // define the path struct
     let base_path: Path = Path{prefix: String::from("/item")};
     // define the routes for the app
-   app.route(&base_path.define(String::from("/create/{title}")),
-             web::post().to(create::create));
+    app.route(&base_path.define(String::from("/create/{title}")),
+              web::post().to(create::create));
 
     app.route(&base_path.define(String::from("/get")),
               web::get().to(get::get));
+
+    app.route(&base_path.define(String::from("/edit")),
+              web::put().to(edit::edit));
 }

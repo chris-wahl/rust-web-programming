@@ -1,6 +1,6 @@
 use std::vec::Vec;
 
-use actix_web::{web, Responder, Error, HttpResponse, HttpRequest};
+use actix_web::{Responder, Error, HttpResponse, HttpRequest};
 use serde::Serialize;
 use futures::future::{ready, Ready};
 
