@@ -2,6 +2,7 @@ use actix_web::web;
 mod path;
 mod auth;
 mod to_do;
+pub mod token;
 
 
 /// This function combines the views from other view modules.

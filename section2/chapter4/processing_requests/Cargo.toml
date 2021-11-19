@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 actix-web = "2"
 actix-rt = "1.0"
+actix-service = "1"
 serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
 futures = "0.3"
 serde = "1"
