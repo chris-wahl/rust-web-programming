@@ -1,10 +1,27 @@
-use serde_json::{Map, Value};
+use std::option::Option;
+use serde_json::Map;
+use serde_json::value::Value;
 
+
+/// Trait for getting to do items.
 pub trait Get {
-    fn get(&self, title: &str, state: &Map<String, Value>) {
-        match state.get(title) {
-            Some(result) => println!("\n\nItem: {}\n\tStatus: {}", title, result),
-            None => println!("Item `{}` was not found", title)
+
+    /// Gets a to do item and prints it out to the console.
+    ///
+    /// # Arguments
+    /// * title (&String): the title of the to do item being fetched
+    /// * state (&serde_json::value::Value): The loaded values from the state file
+    ///
+    /// # Returns
+    /// None
+    fn get(&self, title: &String, state: &Map<String, Value>) {
+        let item: Option<&Value> = state.get(title);
+        match item {
+            Some(result) => {
+                println!("\n\nItem: {}", title);
+                println!("Status: {}\n\n", result);
+            },
+            None => println!("item: {} was not found", title)
         }
     }
 }

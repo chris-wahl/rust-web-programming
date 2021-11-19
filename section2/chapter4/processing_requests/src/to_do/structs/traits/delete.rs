@@ -1,14 +1,22 @@
-use serde_json::{Map, Value};
+use serde_json::Map;
+use serde_json::value::Value;
+
 use crate::state::write_to_file;
 
+
+/// Trait for deleting to do items.
 pub trait Delete {
-    fn delete(&self, title: &str, state: &mut Map<String, Value>) {
-        match state.remove(title) {
-            Some(_) => {
-                write_to_file(state);
-                println!("{} has been deleted", title);
-            }
-            None => println!("{} not found", title)
-        };
+
+    /// Deletes a to do item.
+    ///
+    /// # Arguments
+    /// * title (&String): the title of the item to be deleted
+    ///
+    /// # Returns
+    /// None
+    fn delete(&self, title: &String, state: &mut Map<String, Value>) {
+        state.remove(title);
+        write_to_file(String::from("./state.json"), state);
+        println!("\n\n{} is being deleted\n\n", title);
     }
 }

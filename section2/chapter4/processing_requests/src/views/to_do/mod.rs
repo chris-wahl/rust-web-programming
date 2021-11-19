@@ -1,20 +1,24 @@
 use actix_web::web;
-
-use crate::views::path::Path;
-
+mod utils;
 mod create;
 mod get;
-mod utils;
+use super::path::Path;
 
+
+/// This function adds the to do item views to the web server.
+///
+/// # Arguments
+/// * (&mut web::ServiceConfig): reference to the app for configuration
+///
+/// # Returns
+/// None
 pub fn item_factory(app: &mut web::ServiceConfig) {
-    let base_path = Path {
-        prefix: "/item".to_string()
-    };
-    app.route(
-        &base_path.define(String::from("/get")),
-        web::get().to(get::get),
-    ).route(
-        &base_path.define(String::from("/create/{title}")),
-        web::post().to(create::create),
-    );
+    // define the path struct
+    let base_path: Path = Path{prefix: String::from("/item")};
+    // define the routes for the app
+   app.route(&base_path.define(String::from("/create/{title}")),
+             web::post().to(create::create));
+
+    app.route(&base_path.define(String::from("/get")),
+              web::get().to(get::get));
 }

@@ -1,15 +1,25 @@
-use serde_json::{Map, Value};
+use serde_json::Map;
+use serde_json::value::Value;
 
-use crate::to_do::ItemTypes;
-
+use super::to_do::ItemTypes;
 use super::to_do::structs::done::Done;
 use super::to_do::structs::pending::Pending;
+use super::to_do::structs::traits::get::Get;
 use super::to_do::structs::traits::create::Create;
 use super::to_do::structs::traits::delete::Delete;
 use super::to_do::structs::traits::edit::Edit;
-use super::to_do::structs::traits::get::Get;
 
-fn process_pending(item: Pending, command: String, state: &Map<String, Value>) {
+
+/// This function processes the command on a pending to do item.
+///
+/// # item
+/// * item (Pending): the to do item to be processed
+/// * command (String): command to be acted on the to do item
+/// * state (&Map<String, Value>): the state of the to do items for the program
+///
+/// # Returns
+/// None
+pub fn process_pending(item: Pending, command: String, state: &Map<String, Value>) {
     let mut state = state.clone();
     match command.as_str() {
         "get" => item.get(&item.super_struct.title, &state),
@@ -20,7 +30,17 @@ fn process_pending(item: Pending, command: String, state: &Map<String, Value>) {
     }
 }
 
-fn process_done(item: Done, command: String, state: &Map<String, Value>) {
+
+/// This function processes the command on a done to do item.
+///
+/// # item
+/// * item (Pending): the to do item to be processed
+/// * command (String): command to be acted on the to do item
+/// * state (&Map<String, Value>): the state of the to do items for the program
+///
+/// # Returns
+/// None
+pub fn process_done(item: Done, command: String, state: &Map<String, Value>) {
     let mut state = state.clone();
     match command.as_str() {
         "get" => item.get(&item.super_struct.title, &state),
@@ -30,6 +50,16 @@ fn process_done(item: Done, command: String, state: &Map<String, Value>) {
     }
 }
 
+
+/// This function processes the user input to decide which function to operate.
+///
+/// # Arguments
+/// * item (ItemTypes): one of the to do item types to be processed
+/// * command (String): the command to be acted on the to do item
+/// * state (&Map<String, Value>): the state of the to do item for the program
+///
+/// # Returns
+/// None
 pub fn process_input(item: ItemTypes, command: String, state: &Map<String, Value>) {
     match item {
         ItemTypes::Pending(item) => process_pending(item, command, state),
