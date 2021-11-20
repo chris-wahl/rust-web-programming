@@ -1,4 +1,4 @@
-use actix_web::{App, HttpServer, dev::Service};
+use actix_web::{App, dev::Service, HttpServer};
 mod state;
 mod to_do;
 mod json_serialization;
