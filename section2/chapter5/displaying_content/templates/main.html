@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta content="ie=endge" http-equiv="X-UA-Compatible"/>
-    <meta content="This is a simple to do app" name="description"/>
+    <meta charSet="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta httpEquiv="X-UA-Compatiable" content="ie=edge"/>
+    <meta name="description" content="This is a simple to do app"/>
     <title>To Do App</title>
 </head>
+<style>
+    {{BASE_CSS}}
+    {{CSS}}
+</style>
 <body>
-<h1>Done Items</h1>
-<div id="doneItems"></div>
-<h1>To Do Items</h1>
-<div id="pendingItems"></div>
-<label for="name">Item Name:</label>
-<input id="name" placeholder="create to do item" type="text">
-<button id="create-button" value="Send">Create</button>
+<div class="mainContainer">
+    <h1>Done Items</h1>
+    <div id="doneItems"></div>
+    <h1>To Do Items</h1>
+    <div id="pendingItems"></div>
+    <div class="inputContainer">
+        <label for="name"></label>
+        <input type="text" id="name" placeholder="Create to do item">
+        <div class="actionButton" id="create-button">Create</div>
+    </div>
+</div>
 </body>
 <script type="text/javascript">
     "use strict";

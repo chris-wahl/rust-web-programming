@@ -9,7 +9,9 @@ function renderItems(items, processType, elementId, processFunction) {
     for (let i = 0; i < items.length; i++) {
         const title = items[i]["title"];
         const placeholderId = `${processType}-${title.replaceAll(" ", "-")}`;
-        placeholder += "<div>" + title + `<button id="${placeholderId}">${processType}</button>` + "</div>";
+        placeholder += '<div class="itemContainer">' + `<p>${title}</p>` +
+            `<div id="${placeholderId}" class="actionButton">${processType}</div>` +
+            "</div>";
         itemsMeta.push({id: placeholderId, title});
     }
     placeholder += "</div>";
