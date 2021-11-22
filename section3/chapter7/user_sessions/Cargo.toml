@@ -13,6 +13,9 @@ bcrypt = "0.10"
 diesel = { version = "1.4.4", features = ["postgres"] }
 dotenv = "0.15.0"
 futures = "0.3"
+jwt = "0.9"
+hmac = "0.8"
 serde = "1"
 serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
+sha2 = "0.9"
 uuid = {version = "0.8", features = ["serde", "v4"]}

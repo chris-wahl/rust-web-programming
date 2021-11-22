@@ -1,6 +1,8 @@
 use actix_web::web;
 mod login;
 mod logout;
+mod jwt;
+
 use super::path::Path;
 
 /// This function adds the auth views to the web server.
