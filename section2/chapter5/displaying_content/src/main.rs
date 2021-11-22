@@ -5,6 +5,7 @@ mod json_serialization;
 mod views;
 mod processes;
 
+const ADDR: &str = "127.0.0.1:8000";
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -26,9 +27,11 @@ async fn main() -> std::io::Result<()> {
                 }
             })
             .configure(views::views_factory);
+
+        println!["http://{}", ADDR];
         return app
     })
-        .bind("127.0.0.1:8000")?
+        .bind(ADDR)?
         .run()
         .await
 }
