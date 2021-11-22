@@ -1,10 +1,10 @@
 use actix_web::{HttpRequest, Responder};
-use serde_json::Map;
-use serde_json::value::Value;
+use diesel::prelude::*;
 
-use crate::processes::process_input;
-use crate::state::read_file;
-use crate::to_do;
+use crate::database::establish_connection;
+use crate::diesel;
+use crate::models::item::{item::Item, new_item::NewItem};
+use crate::schema::to_do;
 use crate::views::to_do::utils::return_state;
 
 /// This view creates a to do item and saves it in the state.json file.
@@ -15,22 +15,24 @@ use crate::views::to_do::utils::return_state;
 /// # Returns
 /// * (String): message to be sent back to the user
 pub async fn create(req: HttpRequest) -> impl Responder {
+    let title = req.match_info().get("title").unwrap().to_string();
+    let title_ref = title.clone();
+    let connection = establish_connection();
 
-    // load the data from the state JSON file
-    let state: Map<String, Value> = read_file(String::from(
-        "./state.json"));
+    let items = to_do::table
+        // Find any items with the same title
+        .filter(to_do::columns::title.eq(title_ref.as_str()))
+        .order(to_do::columns::id.asc())
+        .load::<Item>(&connection)
+        .unwrap();
 
-    // get the title from the http request
-    let title: String = req.match_info().get("title"
-    ).unwrap().to_string();
+    if items.len() == 0 {
+        // No matching items found.  Create one.
+        let new_post = NewItem::new(title);
+        let _ = diesel::insert_into(to_do::table)
+            .values(&new_post)
+            .execute(&connection);
+    }
 
-    // create the to do item
-    let item = to_do::to_do_factory(&String::from("pending"),
-                                    title).expect("create ");
-
-    // add the to do item from the state.json
-    process_input(item, "create".to_string(), &state);
-
-    // return results
-    return return_state()
+    return return_state();
 }

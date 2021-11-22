@@ -1,16 +1,13 @@
 use std::vec::Vec;
 
 use diesel::prelude::*;
-use serde_json::Map;
-use serde_json::value::Value;
 
 use crate::database::establish_connection;
 use crate::diesel;
 use crate::json_serialization::to_do_items::ToDoItems;
 use crate::models::item::item::Item;
 use crate::schema::to_do;
-use crate::state::read_file;
-use crate::to_do::{ItemTypes, to_do_factory};
+use crate::to_do::to_do_factory;
 
 /// Gets all the to do items from the state JSON file and processes them to be serialized.
 ///
