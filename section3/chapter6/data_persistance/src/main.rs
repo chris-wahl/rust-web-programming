@@ -1,9 +1,17 @@
+#[macro_use]
+extern crate diesel;
+extern crate dotenv;
+
 use actix_web::{App, dev::Service, HttpServer};
+
 mod state;
 mod to_do;
 mod json_serialization;
 mod views;
 mod processes;
+mod database;
+mod schema;
+mod models;
 
 const ADDR: &str = "127.0.0.1:8000";
 
@@ -29,7 +37,7 @@ async fn main() -> std::io::Result<()> {
             .configure(views::views_factory);
 
         println!["http://{}", ADDR];
-        return app
+        return app;
     })
         .bind(ADDR)?
         .run()
