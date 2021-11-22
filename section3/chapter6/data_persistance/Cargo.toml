@@ -9,6 +9,8 @@ edition = "2021"
 actix-web = "2"
 actix-rt = "1.0"
 actix-service = "1"
-serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
+diesel = { version = "1.4.4", features = ["postgres"] }
+dotenv = "0.15.0"
 futures = "0.3"
 serde = "1"
+serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
