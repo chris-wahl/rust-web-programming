@@ -1,11 +1,10 @@
-use std::fs::File;
 use std::fs;
+use std::fs::File;
 use std::io::Read;
 
-use serde_json::Map;
-use serde_json::value::Value;
 use serde_json::json;
-
+use serde_json::value::Value;
+use serde_json::Map;
 
 /// This function reads a JSON file from disk.
 ///
@@ -20,7 +19,7 @@ pub fn read_file(file_name: String) -> Map<String, Value> {
     file.read_to_string(&mut data).unwrap();
     let json: Value = serde_json::from_str(&data).unwrap();
     let state: Map<String, Value> = json.as_object().unwrap().clone();
-    return state
+    return state;
 }
 
 /// This function writes a JSON map to file on disk.

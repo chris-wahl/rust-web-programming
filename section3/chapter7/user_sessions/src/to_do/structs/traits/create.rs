@@ -1,13 +1,11 @@
-use serde_json::Map;
-use serde_json::value::Value;
 use serde_json::json;
+use serde_json::value::Value;
+use serde_json::Map;
 
 use crate::state::write_to_file;
 
-
 /// Trait for creating to do items.
 pub trait Create {
-
     /// Creates a to do item.
     ///
     /// # Arguments

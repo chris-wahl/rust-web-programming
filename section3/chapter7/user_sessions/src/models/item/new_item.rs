@@ -5,7 +5,7 @@ use crate::schema::to_do;
 pub struct NewItem {
     pub title: String,
     pub status: String,
-    pub user_id: i32
+    pub user_id: i32,
 }
 
 impl NewItem {
@@ -13,7 +13,7 @@ impl NewItem {
         NewItem {
             title,
             status: String::from("pending"),
-            user_id
+            user_id,
         }
     }
 }

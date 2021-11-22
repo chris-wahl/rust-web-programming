@@ -1,11 +1,9 @@
-use std::option::Option;
-use serde_json::Map;
 use serde_json::value::Value;
-
+use serde_json::Map;
+use std::option::Option;
 
 /// Trait for getting to do items.
 pub trait Get {
-
     /// Gets a to do item and prints it out to the console.
     ///
     /// # Arguments
@@ -20,8 +18,8 @@ pub trait Get {
             Some(result) => {
                 println!("\n\nItem: {}", title);
                 println!("Status: {}\n\n", result);
-            },
-            None => println!("item: {} was not found", title)
+            }
+            None => println!("item: {} was not found", title),
         }
     }
 }

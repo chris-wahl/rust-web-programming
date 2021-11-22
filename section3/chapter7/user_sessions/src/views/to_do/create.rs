@@ -28,7 +28,7 @@ pub async fn create(req: HttpRequest) -> impl Responder {
 
     if items.len() == 0 {
         // No matching items found.  Create one.
-        let new_post = NewItem::new(title);
+        let new_post = NewItem::new(title, 1);
         let _ = diesel::insert_into(to_do::table)
             .values(&new_post)
             .execute(&connection);

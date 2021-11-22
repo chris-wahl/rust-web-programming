@@ -19,7 +19,8 @@ use crate::to_do::to_do_factory;
 pub fn return_state() -> ToDoItems {
     let connection = establish_connection();
 
-    let items = to_do::table.order(to_do::columns::id.asc())
+    let items = to_do::table
+        .order(to_do::columns::id.asc())
         .load::<Item>(&connection)
         .unwrap();
 

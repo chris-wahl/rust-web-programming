@@ -1,12 +1,11 @@
 use std::vec::Vec;
 
-use actix_web::{Responder, Error, HttpResponse, HttpRequest};
-use serde::Serialize;
+use actix_web::{Error, HttpRequest, HttpResponse, Responder};
 use futures::future::{ready, Ready};
+use serde::Serialize;
 
-use crate::to_do::ItemTypes;
 use crate::to_do::structs::base::Base;
-
+use crate::to_do::ItemTypes;
 
 /// This struct packages the raw struct fields to package items for JSON serialization.
 ///
@@ -20,11 +19,10 @@ pub struct ToDoItems {
     pub pending_items: Vec<Base>,
     pub done_items: Vec<Base>,
     pub pending_item_count: i8,
-    pub done_item_count: i8
+    pub done_item_count: i8,
 }
 
 impl ToDoItems {
-
     /// This function constructs the ToDoItems struct.
     ///
     /// # Arguments
@@ -38,18 +36,18 @@ impl ToDoItems {
 
         for item in input_items {
             match item {
-                ItemTypes::Pending(packed) => pending_array_buffer.push(
-                    packed.super_struct),
-                ItemTypes::Done(packed) => done_array_buffer.push(
-                    packed.super_struct)
+                ItemTypes::Pending(packed) => pending_array_buffer.push(packed.super_struct),
+                ItemTypes::Done(packed) => done_array_buffer.push(packed.super_struct),
             }
         }
         let done_count: i8 = done_array_buffer.len() as i8;
         let pending_count: i8 = pending_array_buffer.len() as i8;
-        return ToDoItems{
-            pending_items: pending_array_buffer, done_item_count: done_count,
-            pending_item_count: pending_count, done_items: done_array_buffer
-        }
+        return ToDoItems {
+            pending_items: pending_array_buffer,
+            done_item_count: done_count,
+            pending_item_count: pending_count,
+            done_items: done_array_buffer,
+        };
     }
 }
 

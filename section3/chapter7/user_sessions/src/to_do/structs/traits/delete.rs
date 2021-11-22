@@ -1,12 +1,10 @@
-use serde_json::Map;
 use serde_json::value::Value;
+use serde_json::Map;
 
 use crate::state::write_to_file;
 
-
 /// Trait for deleting to do items.
 pub trait Delete {
-
     /// Deletes a to do item.
     ///
     /// # Arguments

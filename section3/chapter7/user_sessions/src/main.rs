@@ -2,16 +2,16 @@
 extern crate diesel;
 extern crate dotenv;
 
-use actix_web::{App, dev::Service, HttpServer};
+use actix_web::{dev::Service, App, HttpServer};
 
+mod database;
+mod json_serialization;
+mod models;
+mod processes;
+mod schema;
 mod state;
 mod to_do;
-mod json_serialization;
 mod views;
-mod processes;
-mod database;
-mod schema;
-mod models;
 
 const ADDR: &str = "127.0.0.1:8000";
 
@@ -22,10 +22,8 @@ async fn main() -> std::io::Result<()> {
             .wrap_fn(|req, srv| {
                 if *&req.path().contains("/item/") {
                     match views::token::process_token(&req) {
-                        Ok(_token) => println!(
-                            "the token is passable"),
-                        Err(message) => println!(
-                            "token error: {}", message)
+                        Ok(_token) => println!("the token is passable"),
+                        Err(message) => println!("token error: {}", message),
                     }
                 }
                 let fut = srv.call(req);
@@ -39,7 +37,7 @@ async fn main() -> std::io::Result<()> {
         println!["http://{}", ADDR];
         return app;
     })
-        .bind(ADDR)?
-        .run()
-        .await
+    .bind(ADDR)?
+    .run()
+    .await
 }

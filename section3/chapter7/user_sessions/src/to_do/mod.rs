@@ -4,7 +4,7 @@ pub use structs::pending::Pending;
 
 pub enum ItemTypes {
     Pending(Pending),
-    Done(Done)
+    Done(Done),
 }
 
 /// This function builds and returns to do structs.
@@ -19,12 +19,10 @@ pub fn to_do_factory(item_type: &String, item_title: String) -> Result<ItemTypes
     if item_type == "pending" {
         let pending_item = Pending::new(item_title);
         Ok(ItemTypes::Pending(pending_item))
-    }
-    else if item_type == "done" {
+    } else if item_type == "done" {
         let done_item = Done::new(item_title);
         Ok(ItemTypes::Done(done_item))
-    }
-    else {
+    } else {
         Err("this is not accepted")
     }
 }
