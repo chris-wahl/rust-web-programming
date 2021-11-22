@@ -1,10 +1,12 @@
 use actix_web::web;
+
+use super::path::Path;
+
 mod utils;
 mod create;
 mod get;
 mod edit;
-use super::path::Path;
-
+mod delete;
 
 /// This function adds the to do item views to the web server.
 ///
@@ -15,7 +17,7 @@ use super::path::Path;
 /// None
 pub fn item_factory(app: &mut web::ServiceConfig) {
     // define the path struct
-    let base_path: Path = Path{prefix: String::from("/item")};
+    let base_path: Path = Path { prefix: String::from("/item") };
     // define the routes for the app
     app.route(&base_path.define(String::from("/create/{title}")),
               web::post().to(create::create));
@@ -25,4 +27,7 @@ pub fn item_factory(app: &mut web::ServiceConfig) {
 
     app.route(&base_path.define(String::from("/edit")),
               web::put().to(edit::edit));
+
+    app.route(&base_path.define(String::from("/delete")),
+              web::delete().to(delete::delete));
 }
