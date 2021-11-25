@@ -1,10 +1,9 @@
 use actix_web::web;
 
 mod app;
-mod auth;
+pub mod auth;
 mod path;
 mod to_do;
-pub mod token;
 mod users;
 
 /// This function combines the views from other view modules.
