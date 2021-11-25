@@ -7,6 +7,7 @@ pub mod create;
 pub fn user_factory(app: &mut web::ServiceConfig) {
     let base_path = Path {
         prefix: String::from("/user"),
+        backend: true
     };
 
     app.route(
