@@ -1423,6 +1423,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "restful-services"
+version = "0.1.0"
+dependencies = [
+ "actix-rt",
+ "actix-service",
+ "actix-web",
+ "bcrypt",
+ "diesel",
+ "dotenv",
+ "futures",
+ "hmac",
+ "jwt",
+ "serde",
+ "serde_json",
+ "sha2",
+ "uuid",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1792,25 +1811,6 @@ dependencies = [
  "idna",
  "matches",
  "percent-encoding",
-]
-
-[[package]]
-name = "user-sessions"
-version = "0.1.0"
-dependencies = [
- "actix-rt",
- "actix-service",
- "actix-web",
- "bcrypt",
- "diesel",
- "dotenv",
- "futures",
- "hmac",
- "jwt",
- "serde",
- "serde_json",
- "sha2",
- "uuid",
 ]
 
 [[package]]

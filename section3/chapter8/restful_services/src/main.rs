@@ -2,7 +2,8 @@
 extern crate diesel;
 extern crate dotenv;
 
-use actix_web::{dev::Service, App, HttpServer};
+use actix_web::{App, dev::Service, HttpResponse, HttpServer};
+use futures::future::{Either, ok};
 
 mod auth;
 mod database;
@@ -21,24 +22,39 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let app = App::new()
             .wrap_fn(|req, srv| {
-                if *&req.path().contains("/item/") {
+                println!["{} - {}", req.method(), req.path()];
+
+                let passed = if *&req.path().contains("/item/") {
                     match auth::process_token(&req) {
-                        Ok(_token) => println!("the token is passable"),
-                        Err(message) => println!("token error: {}", message),
+                        Ok(_token) => true,
+                        Err(message) => false,
                     }
-                }
-                let fut = srv.call(req);
-                async {
-                    let result = fut.await?;
-                    Ok(result)
-                }
+                } else {
+                    true
+                };
+
+                let end_result = match passed {
+                    // token passed, or is not required
+                    true => Either::Left(srv.call(req)),
+                    // token failed
+                    false => {
+                        Either::Right(
+                            ok(
+                                req.into_response(
+                                    HttpResponse::Unauthorized().finish().into_body()
+                                )
+                            )
+                        )
+                    }
+                };
+                end_result
             })
             .configure(views::views_factory);
 
         println!["http://{}", ADDR];
         return app;
     })
-    .bind(ADDR)?
-    .run()
-    .await
+        .bind(ADDR)?
+        .run()
+        .await
 }
