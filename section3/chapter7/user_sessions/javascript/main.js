@@ -1,3 +1,7 @@
+if (localStorage.getItem("user-token") === null) {
+    window.location.replace(document.location.origin + "/login");
+}
+
 function getItems() {
     let call = apiCall("/item/get", "GET");
     call.send();
@@ -62,7 +66,7 @@ function apiCall(url, method) {
     });
     xhr.open(method, url);
     xhr.setRequestHeader("content-type", "application/json");
-    xhr.setRequestHeader("user-token", "token");
+    xhr.setRequestHeader("user-token", localStorage.getItem("user-token"));
     return xhr;
 }
 
