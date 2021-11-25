@@ -2,7 +2,6 @@ use actix_web::dev::ServiceRequest;
 use actix_web::web;
 mod login;
 mod logout;
-pub mod jwt;
 
 use super::path::Path;
 
