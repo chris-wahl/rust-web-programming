@@ -6,7 +6,6 @@ use crate::diesel;
 use crate::json_serialization::new_user::NewUserSchema;
 use crate::models::user::new_user::NewUser;
 use crate::schema::users;
-use crate::schema::users::username;
 
 pub async fn create(new_user: web::Json<NewUserSchema>) -> HttpResponse {
     let connection = establish_connection();

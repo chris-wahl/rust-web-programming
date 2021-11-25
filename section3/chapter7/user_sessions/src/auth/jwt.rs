@@ -4,7 +4,6 @@ extern crate sha2;
 
 use std::collections::BTreeMap;
 
-use actix_web::web::to;
 use hmac::{Hmac, NewMac};
 use jwt::{Header, SignWithKey, Token, VerifyWithKey};
 use sha2::Sha256;
