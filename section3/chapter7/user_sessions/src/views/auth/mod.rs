@@ -3,7 +3,6 @@ use actix_web::web;
 mod login;
 mod logout;
 pub mod jwt;
-mod processes;
 
 use super::path::Path;
 
@@ -29,12 +28,4 @@ pub fn auth_factory(app: &mut web::ServiceConfig) {
         &base_path.define(String::from("/logout")),
         web::get().to(logout::logout),
     );
-}
-
-
-pub fn process_token(request: &ServiceRequest) -> Result<String, &'static str> {
-    match processes::extract_header_token(request) {
-        Ok(token) => processes::check_password(token),
-        Err(message) => Err(message),
-    }
 }

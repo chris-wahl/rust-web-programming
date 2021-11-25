@@ -1,10 +1,13 @@
-/// This function defines a login view.
-///
-/// # Arguments
-/// None
-///
-/// # Returns
-/// (String) message stating that it's the login view
+use crate::diesel;
+use diesel::prelude::*;
+use actix_web::{web, HttpResponse};
+
+use crate::database::establish_connection;
+use crate::models::user::user::User;
+use crate::json_serialization::login::Login;
+use crate::schema::users;
+use crate::auth::process_token;
+
 pub async fn login() -> String {
     format!("Login view")
 }

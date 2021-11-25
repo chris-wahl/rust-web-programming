@@ -4,6 +4,7 @@ extern crate dotenv;
 
 use actix_web::{dev::Service, App, HttpServer};
 
+mod auth;
 mod database;
 mod json_serialization;
 mod models;
@@ -21,7 +22,7 @@ async fn main() -> std::io::Result<()> {
         let app = App::new()
             .wrap_fn(|req, srv| {
                 if *&req.path().contains("/item/") {
-                    match views::auth::process_token(&req) {
+                    match auth::process_token(&req) {
                         Ok(_token) => println!("the token is passable"),
                         Err(message) => println!("token error: {}", message),
                     }
