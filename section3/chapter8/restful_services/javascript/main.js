@@ -1,3 +1,6 @@
+"use strict";
+const LOGIN = `${document.location.origin}/login`;
+
 function getItems() {
     let call = apiCall("/item/get", "GET");
     call.send();
@@ -22,6 +25,13 @@ function renderItems(items, processType, elementId, processFunction) {
             itemsMeta[i]["id"]
         ).addEventListener("click", processFunction);
     }
+}
+
+function runRenderProcess(data) {
+    renderItems(data["pending_items"], "edit", "pendingItems", editItem);
+    renderItems(data["done_items"], "delete", "doneItems", deleteItem);
+    document.getElementById("completeNum").innerHTML = data["done_item_count"];
+    document.getElementById("pendingNum").innerHTML = data["pending_item_count"];
 }
 
 function createItem() {
@@ -52,12 +62,13 @@ function apiCall(url, method) {
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
-            renderItems(JSON.parse(this.responseText)["pending_items"], "edit", "pendingItems", editItem);
-            renderItems(JSON.parse(this.responseText)["done_items"], "delete", "doneItems", deleteItem);
-            document.getElementById("completeNum").innerHTML =
-                JSON.parse(this.responseText)["done_item_count"];
-            document.getElementById("pendingNum").innerHTML = JSON.parse(
-                this.responseText)["pending_item_count"];
+            if (this.status === 401) {
+                window.location.replace(LOGIN)
+            } else {
+                runRenderProcess(JSON.parse(this.responseText));
+                localStorage.setItem("item-cache-date", new Date());
+                localStorage.setItem("item-cache-data", this.responseText);
+            }
         }
     });
     xhr.open(method, `/api/v1${url}`);
@@ -70,7 +81,16 @@ document.getElementById("create-button").addEventListener("click", createItem);
 document.getElementById("logout-button").addEventListener("click", () => window.location.replace("/logout"))
 
 if (localStorage.getItem('user-token') === null) {
-    window.location.replace(`${document.location.origin}/login`);
+    window.location.replace(LOGIN);
 } else {
-    getItems();
+    let cachedData = Date.parse(localStorage.getItem("item-cache-date"));
+    let now = new Date();
+    let difference = Math.round(
+        (now - cachedData) / 1000
+    );
+    if (difference <= 120) {
+        runRenderProcess(JSON.parse(localStorage.getItem("item-cache-data")));
+    } else {
+        getItems();
+    }
 }
