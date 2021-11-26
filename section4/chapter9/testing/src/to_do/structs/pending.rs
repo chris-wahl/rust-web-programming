@@ -22,3 +22,18 @@ impl Pending {
         return Pending { super_struct: base };
     }
 }
+
+#[cfg(test)]
+mod pending_test {
+    use super::Pending;
+
+    #[test]
+    fn new() {
+        let expected_status = String::from("pending");
+        let title = String::from("washing");
+        let expected_title = String::from("washing");
+        let done = Pending::new(title);
+        assert_eq!(expected_status, done.super_struct.status);
+        assert_eq!(expected_title, done.super_struct.title);
+    }
+}

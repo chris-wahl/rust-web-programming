@@ -1,4 +1,5 @@
 use super::base::Base;
+
 /// This struct defines a to do item for a done to do item.
 ///
 /// # Attributes
@@ -22,3 +23,17 @@ impl Done {
     }
 }
 
+#[cfg(test)]
+mod done_test {
+    use super::Done;
+
+    #[test]
+    fn new() {
+        let expected_status = String::from("done");
+        let title = String::from("excel date");
+        let expected_title = String::from("excel date");
+        let done = Done::new(title);
+        assert_eq!(expected_status, done.super_struct.status);
+        assert_eq!(expected_title, done.super_struct.title);
+    }
+}

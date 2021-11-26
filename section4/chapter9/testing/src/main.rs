@@ -28,7 +28,10 @@ async fn main() -> std::io::Result<()> {
                 let passed = if *&req.path().contains("/item/") {
                     match auth::process_token(&req) {
                         Ok(_token) => true,
-                        Err(message) => false,
+                        Err(message) => {
+                            log::error!("Failed to process token: {}", message);
+                            false
+                        },
                     }
                 } else {
                     true
