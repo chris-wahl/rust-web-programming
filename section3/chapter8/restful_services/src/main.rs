@@ -3,7 +3,9 @@ extern crate diesel;
 extern crate dotenv;
 
 use actix_web::{App, dev::Service, HttpResponse, HttpServer};
+use env_logger;
 use futures::future::{Either, ok};
+use log;
 
 mod auth;
 mod database;
@@ -19,11 +21,12 @@ const ADDR: &str = "127.0.0.1:8000";
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
+    dotenv::dotenv().ok();
+    env_logger::init();
     HttpServer::new(|| {
         let app = App::new()
             .wrap_fn(|req, srv| {
-                println!["{} - {}", req.method(), req.path()];
-
+                let request_url = String::from(*&req.uri().path().clone());
                 let passed = if *&req.path().contains("/item/") {
                     match auth::process_token(&req) {
                         Ok(_token) => true,
@@ -52,7 +55,11 @@ async fn main() -> std::io::Result<()> {
                         )
                     }
                 };
-                end_result
+                async move {
+                    let result = end_result.await?;
+                    log::info!("{} -> {}", request_url, &result.status());
+                    Ok(result)
+                }
             })
             .configure(views::views_factory);
 

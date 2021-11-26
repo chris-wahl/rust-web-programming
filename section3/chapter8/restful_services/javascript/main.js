@@ -1,7 +1,3 @@
-if (localStorage.getItem("user-token") === null) {
-    window.location.replace(document.location.origin + "/login");
-}
-
 function getItems() {
     let call = apiCall("/item/get", "GET");
     call.send();
@@ -71,5 +67,10 @@ function apiCall(url, method) {
 }
 
 document.getElementById("create-button").addEventListener("click", createItem);
+document.getElementById("logout-button").addEventListener("click", () => window.location.replace("/logout"))
 
-getItems();
+if (localStorage.getItem('user-token') === null) {
+    window.location.replace(`${document.location.origin}/login`);
+} else {
+    getItems();
+}

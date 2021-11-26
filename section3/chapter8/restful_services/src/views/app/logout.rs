@@ -1,13 +1,10 @@
 use actix_web::HttpResponse;
 
+use super::content_loader::read_file;
+
 pub async fn logout() -> HttpResponse {
+    let html_data = read_file("./templates/logout.html");
     HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
-        .body(
-            "<html>\
-                <script type=\"text/javascript\">\
-                     localStorage.removeItem('user-token';\
-                     window.location.replace(documnet.location.origin);\
-                </script>\
-             </html>")
+        .body(html_data)
 }
