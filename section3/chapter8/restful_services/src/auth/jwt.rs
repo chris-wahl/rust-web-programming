@@ -4,6 +4,7 @@ extern crate sha2;
 
 use std::collections::BTreeMap;
 
+use actix_web::HttpRequest;
 use hmac::{Hmac, NewMac};
 use jwt::{Header, SignWithKey, Token, VerifyWithKey};
 use sha2::Sha256;
@@ -37,6 +38,13 @@ impl JwtToken {
                 });
             }
             Err(_) => return Err("Could not decode")
+        }
+    }
+
+    pub fn decode_from_request(request: HttpRequest) -> Result<JwtToken, &'static str> {
+        match request.headers().get("user-token") {
+            Some(token) => JwtToken::decode(token.to_str().unwrap().to_string()),
+            None => Err("there is no token")
         }
     }
 }
