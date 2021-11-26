@@ -1,5 +1,4 @@
 use actix_web::{HttpRequest, Responder};
-use actix_web::web::to;
 use diesel::prelude::*;
 
 use crate::auth::jwt::JwtToken;
